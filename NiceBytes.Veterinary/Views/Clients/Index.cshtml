@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#">Home</a></li>
+        <li role="presentation">@Html.ActionLink("Profile", "Index", "Clients")</li>
+        <li role="presentation"><a href="#">Messages</a></li>
+    </ul>
+    <div class="col-sm-5 col-md-5 col-lg-5">
+        <form class="navbar-form" role="search">
+            <div class="input-group fill-parent">
+                <input type="text" class="form-control" placeholder="Buscar..." name="srch-term" id="srch-term">
+                <div class="input-group-btn pull-left">
+                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-3 col-md-3 col-lg-3 pull-right margin-right-20">
+        <div class="navbar-form">
+            <a class="btn btn-default" href="#" role="button">
+                Agregar Nuevo
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Firstname</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Anna</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Debbie</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>John</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
