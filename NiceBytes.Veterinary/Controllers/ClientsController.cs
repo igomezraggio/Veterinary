@@ -1,4 +1,5 @@
-﻿using NiceBytes.Veterinary.Models;
+﻿using NiceBytes.Veterinary.DAL;
+using NiceBytes.Veterinary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,18 @@ namespace NiceBytes.Veterinary.Controllers
 {
     public class ClientsController : Controller
     {
+        private ClientsDb clientsDb = new ClientsDb();
         // GET: Client
         public ActionResult Index()
         {
-            return View();
+            var clients = clientsDb.Clients;
+            return View(clients.ToList());
         }
 
         // GET: Client/Details
         public ActionResult Details()
         {
-            var client = new ClientsModel { Id = 1, ClientNumber = "1111", FirstName = "Sabrina", LastName = "Estala", 
+            var client = new ClientsModel { Id = 1, ClientNumber = 1111, FirstName = "Sabrina", LastName = "Estala", 
                                             Email = "sabrina.estala@gmail.com", PhoneNumber = 99665684};
             return View(client);
         }

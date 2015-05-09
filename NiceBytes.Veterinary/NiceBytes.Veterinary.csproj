@@ -177,6 +177,18 @@
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="DAL\ClientsDb.cs" />
+    <Compile Include="DAL\ClientsMigrations\201505090113324_Initial.cs" />
+    <Compile Include="DAL\ClientsMigrations\201505090113324_Initial.Designer.cs">
+      <DependentUpon>201505090113324_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\ClientsMigrations\Configuration.cs" />
+    <Compile Include="DAL\IdentityDb.cs" />
+    <Compile Include="DAL\IdentityMigrations\201505090113034_Initial.cs" />
+    <Compile Include="DAL\IdentityMigrations\201505090113034_Initial.Designer.cs">
+      <DependentUpon>201505090113034_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\IdentityMigrations\Configuration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -267,6 +279,14 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DAL\ClientsMigrations\201505090113324_Initial.resx">
+      <DependentUpon>201505090113324_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\IdentityMigrations\201505090113034_Initial.resx">
+      <DependentUpon>201505090113034_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
