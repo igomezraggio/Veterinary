@@ -20,5 +20,19 @@ namespace NiceBytes.Veterinary.DAL
         }
 
         public DbSet<ClientsModel> Clients { get; set; }
+
+        public bool AddClient(ClientsModel client)
+        {
+            try
+            {
+                Clients.Add(client);
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

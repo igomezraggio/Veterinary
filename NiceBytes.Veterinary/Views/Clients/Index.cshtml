@@ -22,9 +22,9 @@
     </div>
     <div class="col-sm-3 col-md-3 col-lg-3 pull-right margin-right-20">
         <div class="navbar-form">
-            <a class="btn btn-default" href="#" role="button">
-                Agregar Nuevo
-                <span class="glyphicon glyphicon-plus"></span>
+            <a href=@Url.Action("Create","Clients") class="btn btn-default">
+            Agregar Nuevo
+            <span class="glyphicon glyphicon-plus"></span>
             </a>
         </div>
     </div>
@@ -38,7 +38,7 @@
                 <th>Teléfono</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach:currentTransactions">
+        <tbody data-bind="foreach: currentClients">
             <tr>
                 <td data-bind="text:ClientNumber"></td>
                 <td data-bind="text:FirstName"></td>
@@ -65,14 +65,14 @@
         var self = this;
 
         // properties
-        self.transactions = @Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
+        self.clients = @Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
         self.pageSize = 5;
-        self.lastPage = Math.ceil(self.transactions.length / self.pageSize);
+        self.lastPage = Math.ceil(self.clients.length / self.pageSize);
         self.currentPage = ko.observable(1);
-        self.currentTransactions = ko.computed(function(){
+        self.currentClients = ko.computed(function(){
             var startIndex = (self.currentPage() - 1) * self.pageSize;
             var endIndex = startIndex + self.pageSize;
-            return self.transactions.slice(startIndex, endIndex);
+            return self.clients.slice(startIndex, endIndex);
         });
 
         // methods

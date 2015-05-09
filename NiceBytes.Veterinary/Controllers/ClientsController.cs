@@ -29,23 +29,28 @@ namespace NiceBytes.Veterinary.Controllers
         // GET: Client/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView("_CreateClient");
         }
 
         // POST: Client/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(ClientsModel newClient)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                return PartialView("_CreateClient", newClient);
             }
-            catch
+            else
             {
-                return View();
+                bool IsSuccess = clientsDb.AddClient(newClient);
+                if (IsSuccess)
+                {
+                    TempData["OperStatus"] = "Employee added succeessfully";
+                    ModelState.Clear();
+                    return RedirectToAction("Index");
+                }
             }
+            return PartialView("_CreateClient");
         }
 
         // GET: Client/Edit/5
