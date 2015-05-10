@@ -36,15 +36,27 @@
                 <th>Apellido</th>
                 <th>Email</th>
                 <th>Teléfono</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody data-bind="foreach: currentClients">
-            <tr>
+            <tr data-bind="click: $parent.select">
                 <td data-bind="text:ClientNumber"></td>
                 <td data-bind="text:FirstName"></td>
                 <td data-bind="text:LastName"></td>
                 <td data-bind="text:Email"></td>
                 <td data-bind="text:PhoneNumber"></td>
+                <td>
+                    <a href="#" class="btn btn-default">
+                        <img src="~/icon-dog.png" />
+                    </a>
+                    <button data-bind="click: $root.edit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button data-bind="click: $root.delete" class="btn btn-default">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
             </tr>
         </tbody>
         <tfoot>
@@ -58,31 +70,98 @@
         </tfoot>
 </table>
 </div>
+<div id="result">
+
+</div>
 
 <script src="~/Scripts/knockout-3.3.0.js"></script>
 <script>
     function ClientsViewModel() {
         var self = this;
-
+        var clientSelected = null;
         // properties
-        self.clients = @Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore}));
+        self.clients = ko.observableArray(@Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore})));
         self.pageSize = 5;
         self.lastPage = Math.ceil(self.clients.length / self.pageSize);
         self.currentPage = ko.observable(1);
-        self.currentClients = ko.computed(function(){
+        self.currentClients = ko.computed(function () {
             var startIndex = (self.currentPage() - 1) * self.pageSize;
             var endIndex = startIndex + self.pageSize;
             return self.clients.slice(startIndex, endIndex);
         });
 
         // methods
-        self.nextPage = function(){
+        self.nextPage = function () {
             self.currentPage(self.currentPage() + 1);
         };
-        self.previousPage = function(){
+        self.previousPage = function () {
             self.currentPage(self.currentPage() - 1);
         };
+
+        self.select = function (item) {
+            clientSelected = item.ClientNumber;
+        };
+
+        self.selected = ko.observable(self.clients()[0]);
+
+        self.edit = function (item) {
+            var Client = item.ClientNumber;
+            alert("holaaaa");
+            $.ajax({
+                prop: 'href',
+                url: '@Url.Action("Edit", "Clients")',
+                type: 'GET',
+                data: { id: Client },
+                dataType: 'HTML',  // add this line
+                success: function (result) {
+                    $('#result').empty();
+                    $('#result').html(result);
+                }
+            });
+        }
+
+        self.update = function () {
+            var Client = item;
+            alert("holaaaa");
+            $.ajax({
+                url: '@Url.Action("Update", "Clients")',
+                cache: false,
+                type: 'PUT',
+                contentType: 'application/json; charset=utf-8',
+                data: ko.toJSON(Client),
+                success: function (data) {
+                    self.Client.removeAll();
+                    self.Client(data); //Put the response in ObservableArray
+                    self.Client(null);
+                    alert("Record Updated Successfully");
+                }
+            })
+            .fail(
+            function (xhr, textStatus, err) {
+                alert(err);
+            });
+        }
+
+        self.delete = function (Client) {
+            if (confirm('¿Desea eliminar a socio "' + Client.FirstName + " " + Client.LastName + '"?')) {
+                var clientNum = Client.ClientNumber;
+                alert(clientNum);
+                $.ajax({
+                    url: '@Url.Action("Delete", "Clients")',
+                    cache: false,
+                    type: 'POST',
+                    data: {id: clientNum},
+                    success: function (data) {
+                        self.clients.remove(Client);
+
+                    }
+                }).fail(
+                function (xhr, textStatus, err) {
+                });
+            }
+        }
     };
 
     ko.applyBindings(new ClientsViewModel());
+
 </script>

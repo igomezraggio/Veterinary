@@ -54,12 +54,17 @@ namespace NiceBytes.Veterinary.Controllers
         }
 
         // GET: Client/Edit/5
+        [HttpGet]
         public ActionResult Edit(int id)
         {
-            return View();
+            ClientsModel client = clientsDb.GetClient(id);
+
+            //ViewBag.IsUpdate = true;
+            return PartialView("_EditClient", client);
         }
 
         // POST: Client/Edit/5
+        /*
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -74,27 +79,32 @@ namespace NiceBytes.Veterinary.Controllers
                 return View();
             }
         }
+        */
 
+        [HttpPost]
+        public ActionResult Edit(ClientsModel client)
+        {
+            if (clientsDb.UpdateClient(client))
+            {
+                return RedirectToAction("Index");
+            }
+            return PartialView("_EditClient", client);
+        }
+        
         // GET: Client/Delete/5
+        /*
         public ActionResult Delete(int id)
         {
             return View();
         }
-
+        */
         // POST: Client/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public void Delete(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            // TODO: Add delete logic here
+            clientsDb.DeleteClient(id);
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }
