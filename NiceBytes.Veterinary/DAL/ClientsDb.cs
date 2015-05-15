@@ -9,6 +9,8 @@ namespace NiceBytes.Veterinary.DAL
 {
     public class ClientsDb :DbContext
     {
+        private bool clientDbChanged;
+
         public ClientsDb()
             : base("DefaultConnection")
         {
@@ -47,6 +49,11 @@ namespace NiceBytes.Veterinary.DAL
             }
         }
 
+        public IEnumerable<ClientsModel> GetAllClients()
+        {
+            return Clients.ToList();
+        }
+
         public bool UpdateClient(ClientsModel client)
         {
             var clientFound = Clients.Where(p => p.ClientNumber == client.ClientNumber);
@@ -75,5 +82,7 @@ namespace NiceBytes.Veterinary.DAL
             }
             
         }
+
+        public System.Data.Entity.DbSet<NiceBytes.Veterinary.Models.PetsModel> PetsModels { get; set; }
     }
 }

@@ -177,10 +177,23 @@
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PetsController.cs" />
     <Compile Include="DAL\ClientsDb.cs" />
     <Compile Include="DAL\ClientsMigrations\201505090113324_Initial.cs" />
     <Compile Include="DAL\ClientsMigrations\201505090113324_Initial.Designer.cs">
       <DependentUpon>201505090113324_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\ClientsMigrations\201505100825492_ClientsPets.cs" />
+    <Compile Include="DAL\ClientsMigrations\201505100825492_ClientsPets.Designer.cs">
+      <DependentUpon>201505100825492_ClientsPets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\ClientsMigrations\201505101901123_NuevasColumnas.cs" />
+    <Compile Include="DAL\ClientsMigrations\201505101901123_NuevasColumnas.Designer.cs">
+      <DependentUpon>201505101901123_NuevasColumnas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\ClientsMigrations\201505150237353_Ajuste.cs" />
+    <Compile Include="DAL\ClientsMigrations\201505150237353_Ajuste.Designer.cs">
+      <DependentUpon>201505150237353_Ajuste.cs</DependentUpon>
     </Compile>
     <Compile Include="DAL\ClientsMigrations\Configuration.cs" />
     <Compile Include="DAL\IdentityDb.cs" />
@@ -189,6 +202,20 @@
       <DependentUpon>201505090113034_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="DAL\IdentityMigrations\Configuration.cs" />
+    <Compile Include="DAL\PetsDb.cs" />
+    <Compile Include="DAL\PetsMigrations\201505100826479_ClientsPets.cs" />
+    <Compile Include="DAL\PetsMigrations\201505100826479_ClientsPets.Designer.cs">
+      <DependentUpon>201505100826479_ClientsPets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\PetsMigrations\201505101901330_NuevasColumnas.cs" />
+    <Compile Include="DAL\PetsMigrations\201505101901330_NuevasColumnas.Designer.cs">
+      <DependentUpon>201505101901330_NuevasColumnas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\PetsMigrations\201505150238497_Ajuste.cs" />
+    <Compile Include="DAL\PetsMigrations\201505150238497_Ajuste.Designer.cs">
+      <DependentUpon>201505150238497_Ajuste.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\PetsMigrations\Configuration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -197,6 +224,7 @@
     <Compile Include="Models\ClientsViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PetsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -275,9 +303,11 @@
     <Content Include="Views\Clients\Index.cshtml" />
     <Content Include="Views\Shared\_CreateClient.cshtml" />
     <Content Include="Views\Shared\_EditClient.cshtml" />
+    <Content Include="Views\Shared\_PetsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Pets\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -287,8 +317,26 @@
     <EmbeddedResource Include="DAL\ClientsMigrations\201505090113324_Initial.resx">
       <DependentUpon>201505090113324_Initial.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DAL\ClientsMigrations\201505100825492_ClientsPets.resx">
+      <DependentUpon>201505100825492_ClientsPets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\ClientsMigrations\201505101901123_NuevasColumnas.resx">
+      <DependentUpon>201505101901123_NuevasColumnas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\ClientsMigrations\201505150237353_Ajuste.resx">
+      <DependentUpon>201505150237353_Ajuste.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DAL\IdentityMigrations\201505090113034_Initial.resx">
       <DependentUpon>201505090113034_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\PetsMigrations\201505100826479_ClientsPets.resx">
+      <DependentUpon>201505100826479_ClientsPets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\PetsMigrations\201505101901330_NuevasColumnas.resx">
+      <DependentUpon>201505101901330_NuevasColumnas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\PetsMigrations\201505150238497_Ajuste.resx">
+      <DependentUpon>201505150238497_Ajuste.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

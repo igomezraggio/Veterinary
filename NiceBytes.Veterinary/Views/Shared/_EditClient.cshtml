@@ -1,12 +1,23 @@
 ﻿@model NiceBytes.Veterinary.Models.ClientsModel
-
+@using Newtonsoft.Json;
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4>ClientsModel</h4>
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="active">
+            <a href="#">Perfil</a>
+        </li>
+
+        <li role="presentation">
+            <a href="#">Mascotas</a>
+        </li>
+
+
+    </ul>
+    
+    <div class="form-horizontal" id="clientEdit">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
@@ -14,7 +25,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ClientNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ClientNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.ClientNumber, new { @class = "form-control", data_bind = "value: ClientNumberM" })
                 @Html.ValidationMessageFor(model => model.ClientNumber, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -22,7 +33,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", data_bind = "value: FirstNameM" })
                 @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -30,7 +41,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", data_bind = "value: LastNameM" })
                 @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -38,7 +49,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", data_bind = "value: EmailM" })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -46,23 +57,79 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", data_bind = "value: PhoneNumberM" })
                 @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.DateEntry, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateEntry,  new { @class = "form-control", data_bind = "value: DateEntryM" })
+                @Html.ValidationMessageFor(model => model.DateEntry, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <button data-bind="click: $root.update" class="btn btn-default" id="ClientSaveBtn">
+                    <span class="glyphicon glyphicon-floppy-saved"></span>
+                </button>
             </div>
         </div>
     </div>
 }
+<script>
+    function Details() {
+        var self = this;
+        self.Client = ko.observable(@Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore})));
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
+        self.ClientNumberM = ko.observable(@Model.ClientNumber);
+        self.FirstNameM = ko.observable(@Html.Raw(Json.Encode(Model.FirstName)));
+        self.LastNameM = ko.observable(@Html.Raw(Json.Encode(Model.LastName)));
+        self.EmailM = ko.observable(@Html.Raw(Json.Encode(Model.Email)));
+        self.PhoneNumberM = ko.observable(@Model.PhoneNumber);
+        self.DateEntryM = ko.observable(@Html.Raw(Json.Encode(Model.DateEntry.ToString())));
+
+        self.update = function (item) {
+            //var Client = item;
+            var oldClient = jQuery.extend(true, {}, item.Client());
+
+            console.log(item.Client());
+            item.Client().ClientNumber = self.ClientNumberM();
+            item.Client().FirstName = self.FirstNameM();
+            item.Client().LastName = self.LastNameM();
+            item.Client().Email = self.EmailM();
+            item.Client().DateEntry = self.DateEntryM();
+            item.Client().PhoneNumber = self.PhoneNumberM();
+
+            var clientToUpdate = {};
+            clientToUpdate.ClientNumber = item.Client().ClientNumber;
+            clientToUpdate.FirstName = item.Client().FirstName;
+            clientToUpdate.LastName = item.Client().LastName;
+            clientToUpdate.Email = item.Client().Email;
+            clientToUpdate.DateEntry = item.Client().DateEntry
+            clientToUpdate.PhoneNumber = item.Client().PhoneNumber
+            var Data = JSON.stringify({ client: clientToUpdate });
+            console.log(Data);
+            $.ajax({
+                url: '@Url.Action("Edits", "Clients")',
+                cache: false,
+                type: 'POST',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: Data,
+                success: function(data){
+                    document.getElementById("clientEdit").innerHTML = "";
+                    window.location.href = '@(Url.Action("Index","Clients"))'
+                },
+            });
+        }
+    }
+
+    ko.applyBindings(new Details(), document.getElementById("clientEdit"));
+</script>
 @section Scripts {
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")

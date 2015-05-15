@@ -3,19 +3,24 @@ using NiceBytes.Veterinary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace NiceBytes.Veterinary.Controllers
 {
     public class ClientsController : Controller
     {
         private ClientsDb clientsDb = new ClientsDb();
+        private bool clientDbChanged;
         // GET: Client
         public ActionResult Index()
         {
-            var clients = clientsDb.Clients;
-            return View(clients.ToList());
+            IEnumerable<ClientsModel> clients = clientsDb.Clients.ToList();
+            if (clientDbChanged)
+                clients = clientsDb.GetAllClients();
+            return View(clients);
         }
 
         // GET: Client/Details
@@ -82,13 +87,18 @@ namespace NiceBytes.Veterinary.Controllers
         */
 
         [HttpPost]
-        public ActionResult Edit(ClientsModel client)
+        public ActionResult Edits(ClientsModel client)
         {
-            if (clientsDb.UpdateClient(client))
-            {
+            
+            clientsDb.UpdateClient(client);
+            clientDbChanged = true;
+            
+            return Json(new { success = true, responseText = "Your message successfuly sent!" }, JsonRequestBehavior.AllowGet);
+            //return RedirectToAction("Index");
+            /*{
                 return RedirectToAction("Index");
-            }
-            return PartialView("_EditClient", client);
+            }*/
+            //return PartialView("_EditClient", client);
         }
         
         // GET: Client/Delete/5

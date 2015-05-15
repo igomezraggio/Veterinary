@@ -1,14 +1,23 @@
-﻿@model IEnumerable<NiceBytes.Veterinary.Models.ClientsModel>
+﻿@model IEnumerable<NiceBytes.Veterinary.Models.PetsModel>
 @using Newtonsoft.Json;
 @{
     ViewBag.Title = "Index";
 
 }
 
+<ul class="nav nav-tabs">
+    <li role="presentation">
+        <a href="#">Perfil</a>
+    </li>
 
-<script src="~/Scripts/knockout-3.3.0.js"></script>
+    <li role="presentation" class="active">
+        <a href="#">Mascotas</a>
+    </li>
 
-<div class="row" id="clients">
+
+</ul>
+
+<div class="row" id="pets">
     <div class="col-sm-5 col-md-5 col-lg-5">
         <form class="navbar-form" role="search">
             <div class="input-group fill-parent">
@@ -27,31 +36,26 @@
             </button>
         </div>
     </div>
-    <div id="gridClients">
+    <div id="gridPets">
         <div class="panel panel-default">
             <div class="panel-body">
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Socio</th>
+                            <th>Mascota</th>
                             <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Email</th>
-                            <th>Teléfono</th>
+                            <th>Género</th>
+                            <th>Ingreso</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody data-bind="foreach: currentClients">
+                    <tbody data-bind="foreach: currentPets">
                         <tr data-bind="click: $parent.select">
-                            <td data-bind="text:ClientNumber"></td>
+                            <td data-bind="text:PetNumber"></td>
                             <td data-bind="text:FirstName"></td>
-                            <td data-bind="text:LastName"></td>
-                            <td data-bind="text:Email"></td>
-                            <td data-bind="text:PhoneNumber"></td>
+                            <td data-bind="text:Gender"></td>
+                            <td data-bind="text:DateEntry"></td>
                             <td>
-                                <button data-bind="click: $root.viewPets" class="btn btn-default">
-                                    <img src="~/icon-dog.png" />
-                                </button>
                                 <button data-bind="click: $root.edit" class="btn btn-default">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
@@ -80,11 +84,6 @@
     </div>
 </div>
 
-
-<div id="result">
-
-</div>
-
 <script>
     debugger;
     var clientSelected = null;
@@ -93,14 +92,14 @@
         var self = this;
         debugger;
         // properties
-        self.clients = ko.observableArray(@Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore})));
+        self.pets = ko.observableArray(@Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore})));
         self.pageSize = 4;
-        self.lastPage = Math.ceil(self.clients().length / self.pageSize);
+        self.lastPage = Math.ceil(self.pets().length / self.pageSize);
         self.currentPage = ko.observable(1);
-        self.currentClients = ko.computed(function () {
+        self.currentPets = ko.computed(function () {
             var startIndex = (self.currentPage() - 1) * self.pageSize;
             var endIndex = startIndex + self.pageSize;
-            return self.clients().slice(startIndex, endIndex);
+            return self.pets().slice(startIndex, endIndex);
         });
 
         // methods
@@ -112,25 +111,10 @@
         };
 
         self.select = function (item) {
-            clientSelected = item.ClientNumber;
+            clientSelected = item.PetNumber;
         };
 
-        self.selected = ko.observable(self.clients()[0]);
-
-        self.viewPets = function () {
-            alert("holaaa");
-            debugger;
-            $.ajax({
-                prop: 'href',
-                url: '@Url.Action("Index", "Pets")',
-                type: 'GET',
-                dataType: 'HTML',  // add this line
-                success: function (result) {
-                    $('#result').empty();
-                    $('#result').html(result);
-                }
-            });
-        }
+        self.selected = ko.observable(self.pets()[0]);
 
         self.add = function () {
             debugger;
@@ -181,7 +165,7 @@
 
     };
     debugger;
-    ko.applyBindings(new ClientsViewModel(), document.getElementById("clients"));
+    ko.applyBindings(new ClientsViewModel(), document.getElementById("pets"));
 
 
 </script>

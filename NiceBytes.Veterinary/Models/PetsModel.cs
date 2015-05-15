@@ -2,21 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
 namespace NiceBytes.Veterinary.Models
 {
-    public class ClientsModel
+    public class PetsModel
     {
         [Column(TypeName="INT")]
         public int Id { get; set; }
 
         [Required]
-        [Display(Name="Socio")]
+        [Display(Name="Mascota")]
         [Column(TypeName = "INT")]
-        public int ClientNumber { get; set; }
+        public int PetNumber { get; set; }
 
         [Required]
         [Display(Name = "Nombre")]
@@ -25,24 +24,31 @@ namespace NiceBytes.Veterinary.Models
         public String FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Apellido")]
-        [StringLength(50)]
+        [Display(Name = "Sexo")]
+        [StringLength(1)]
         [Column(TypeName = "NVARCHAR")]
-        public String LastName { get; set; }
+        public String Gender { get; set; }
 
-        [Display(Name = "Email")]
-        [StringLength(50)]
+        [Display(Name = "Nacimiento")]
+        [Column(TypeName = "DATE")]
+        public DateTime DateBirth { get; set; }
+
+        [Display(Name = "Raza")]
+        [StringLength(40)]
         [Column(TypeName = "NVARCHAR")]
-        public String Email { get; set; }
+        public String Breed { get; set; }
 
-        [Display(Name = "Teléfono")]
-        [Column(TypeName = "INT")]
-        public int PhoneNumber { get; set; }
+        [Display(Name = "Color")]
+        [StringLength(30)]
+        [Column(TypeName = "NVARCHAR")]
+        public String Colour { get; set; }
 
         [Display(Name = "Ingreso")]
         [Column(TypeName = "DATE")]
         public DateTime DateEntry { get; set; }
 
-        public DbSet<PetsModel> PetsModels { get; set; }
+        public virtual ClientsModel Client {get; set;}
+        public int ClientsModelId { get; set; }
     }
+
 }
