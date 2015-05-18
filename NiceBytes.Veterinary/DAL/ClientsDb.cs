@@ -22,6 +22,10 @@ namespace NiceBytes.Veterinary.DAL
         }
 
         public DbSet<ClientsModel> Clients { get; set; }
+        
+        public DbSet<PetsModel> PetsModels { get; set; }
+
+        public DbSet<Registry> Registries { get; set; }
 
         public bool AddClient(ClientsModel client)
         {
@@ -37,11 +41,23 @@ namespace NiceBytes.Veterinary.DAL
             }
         }
 
-        public ClientsModel GetClient(int id)
+        public ClientsModel GetClient(int clientNumber)
         {
             try
             {
-                return Clients.Where(m => m.ClientNumber == id).FirstOrDefault();
+                return Clients.Where(m => m.ClientNumber == clientNumber).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public ClientsModel GetClientById(int id)
+        {
+            try
+            {
+                return Clients.Where(m => m.Id == id).FirstOrDefault();
             }
             catch (Exception e)
             {
@@ -83,6 +99,44 @@ namespace NiceBytes.Veterinary.DAL
             
         }
 
-        public System.Data.Entity.DbSet<NiceBytes.Veterinary.Models.PetsModel> PetsModels { get; set; }
+        public IEnumerable<PetsModel> GetClientPets(int clientId)
+        {
+            ClientsModel client = Clients.Where(x => x.Id == clientId).FirstOrDefault();
+            return client.PetsModels.ToList();
+        }
+
+        public bool AddPet(ClientsModel client, PetsModel pet)
+        {
+            try
+            {
+                var clientDb = Clients.Find(client.Id);
+                clientDb.PetsModels.Add(pet);
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool DeletePet(int clientId, PetsModel pet)
+        {
+            try
+            {
+                var clientDb = Clients.Find(clientId);
+                var petToDelete = clientDb.PetsModels.Where(x => x.Id == pet.Id).FirstOrDefault();
+                var petToDelete2 = PetsModels.Where(x => x.Id == pet.Id).FirstOrDefault();
+                PetsModels.Remove(petToDelete2);
+                this.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        
     }
 }

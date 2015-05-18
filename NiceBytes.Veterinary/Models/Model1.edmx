@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="db1d7665e0137842feb3c1a492001e177dModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClientsModels">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientNumber" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar(max)" />
+          <Property Name="LastName" Type="nvarchar(max)" />
+          <Property Name="Email" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="int" Nullable="false" />
+          <Property Name="DateEntry" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PetsModels">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar(max)" />
+          <Property Name="ClientsModelId" Type="int" Nullable="false" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="1" Nullable="false" />
+          <Property Name="DateBirth" Type="date" Nullable="false" />
+          <Property Name="Breed" Type="nvarchar(max)" />
+          <Property Name="Colour" Type="nvarchar(max)" />
+          <Property Name="DateEntry" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Registries">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PetsModelId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_PetsModels_dbo_ClientsModels_ClientsModelId">
+          <End Role="ClientsModels" Type="Self.ClientsModels" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PetsModels" Type="Self.PetsModels" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientsModels">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PetsModels">
+              <PropertyRef Name="ClientsModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RegistryPetsModel">
+          <End Role="PetsModels" Type="Self.PetsModels" Multiplicity="1" />
+          <End Role="Registries" Type="Self.Registries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PetsModels">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registries">
+              <PropertyRef Name="PetsModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db1d7665e0137842feb3c1a492001e177dModelStoreContainer">
+          <EntitySet Name="ClientsModels" EntityType="Self.ClientsModels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PetsModels" EntityType="Self.PetsModels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Registries" EntityType="Self.Registries" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_PetsModels_dbo_ClientsModels_ClientsModelId" Association="Self.FK_dbo_PetsModels_dbo_ClientsModels_ClientsModelId">
+            <End Role="ClientsModels" EntitySet="ClientsModels" />
+            <End Role="PetsModels" EntitySet="PetsModels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RegistryPetsModel" Association="Self.FK_RegistryPetsModel">
+            <End Role="PetsModels" EntitySet="PetsModels" />
+            <End Role="Registries" EntitySet="Registries" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="db1d7665e0137842feb3c1a492001e177dModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClientsModel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientNumber" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="Int32" Nullable="false" />
+          <Property Name="DateEntry" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="PetsModels" Relationship="Self.FK_dbo_PetsModels_dbo_ClientsModels_ClientsModelId" FromRole="ClientsModels" ToRole="PetsModels" />
+        </EntityType>
+        <EntityType Name="PetsModel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientsModelId" Type="Int32" Nullable="false" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateBirth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Breed" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Colour" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEntry" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="ClientsModel" Relationship="Self.FK_dbo_PetsModels_dbo_ClientsModels_ClientsModelId" FromRole="PetsModels" ToRole="ClientsModels" />
+          <NavigationProperty Name="Registries" Relationship="db1d7665e0137842feb3c1a492001e177dModel.FK_RegistryPetsModel" FromRole="PetsModel" ToRole="Registry" />
+        </EntityType>
+        <Association Name="FK_dbo_PetsModels_dbo_ClientsModels_ClientsModelId">
+          <End Role="ClientsModels" Type="Self.ClientsModel" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PetsModels" Type="Self.PetsModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClientsModels">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PetsModels">
+              <PropertyRef Name="ClientsModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db1d7665e0137842feb3c1a492001e177dEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClientsModels" EntityType="Self.ClientsModel" />
+          <EntitySet Name="PetsModels" EntityType="Self.PetsModel" />
+          <AssociationSet Name="FK_dbo_PetsModels_dbo_ClientsModels_ClientsModelId" Association="Self.FK_dbo_PetsModels_dbo_ClientsModels_ClientsModelId">
+            <End Role="ClientsModels" EntitySet="ClientsModels" />
+            <End Role="PetsModels" EntitySet="PetsModels" />
+          </AssociationSet>
+          <EntitySet Name="Registries" EntityType="db1d7665e0137842feb3c1a492001e177dModel.Registry" />
+          <AssociationSet Name="FK_RegistryPetsModel" Association="db1d7665e0137842feb3c1a492001e177dModel.FK_RegistryPetsModel">
+            <End Role="PetsModel" EntitySet="PetsModels" />
+            <End Role="Registry" EntitySet="Registries" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Registry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PetsModelId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PetsModel" Relationship="db1d7665e0137842feb3c1a492001e177dModel.FK_RegistryPetsModel" FromRole="Registry" ToRole="PetsModel" />
+        </EntityType>
+        <Association Name="FK_RegistryPetsModel">
+          <End Type="db1d7665e0137842feb3c1a492001e177dModel.PetsModel" Role="PetsModel" Multiplicity="1" />
+          <End Type="db1d7665e0137842feb3c1a492001e177dModel.Registry" Role="Registry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PetsModel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registry">
+              <PropertyRef Name="PetsModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="db1d7665e0137842feb3c1a492001e177dModelStoreContainer" CdmEntityContainer="db1d7665e0137842feb3c1a492001e177dEntities">
+          <EntitySetMapping Name="ClientsModels">
+            <EntityTypeMapping TypeName="db1d7665e0137842feb3c1a492001e177dModel.ClientsModel">
+              <MappingFragment StoreEntitySet="ClientsModels">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ClientNumber" ColumnName="ClientNumber" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="DateEntry" ColumnName="DateEntry" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PetsModels">
+            <EntityTypeMapping TypeName="db1d7665e0137842feb3c1a492001e177dModel.PetsModel">
+              <MappingFragment StoreEntitySet="PetsModels">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="ClientsModelId" ColumnName="ClientsModelId" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DateBirth" ColumnName="DateBirth" />
+                <ScalarProperty Name="Breed" ColumnName="Breed" />
+                <ScalarProperty Name="Colour" ColumnName="Colour" />
+                <ScalarProperty Name="DateEntry" ColumnName="DateEntry" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registries">
+            <EntityTypeMapping TypeName="db1d7665e0137842feb3c1a492001e177dModel.Registry">
+              <MappingFragment StoreEntitySet="Registries">
+                <ScalarProperty Name="PetsModelId" ColumnName="PetsModelId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

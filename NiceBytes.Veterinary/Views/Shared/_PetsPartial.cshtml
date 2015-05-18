@@ -88,11 +88,12 @@
     debugger;
     var clientSelected = null;
 
-    function ClientsViewModel() {
+    function PetsViewModel() {
         var self = this;
-        debugger;
         // properties
+        debugger;
         self.pets = ko.observableArray(@Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore})));
+        self.clientId = @ViewBag.ClientId;
         self.pageSize = 4;
         self.lastPage = Math.ceil(self.pets().length / self.pageSize);
         self.currentPage = ko.observable(1);
@@ -116,11 +117,11 @@
 
         self.selected = ko.observable(self.pets()[0]);
 
-        self.add = function () {
-            debugger;
+        self.add = function (item) {
             $.ajax({
                 prop: 'href',
-                url: '@Url.Action("Create", "Clients")',
+                url: '@Url.Action("Create", "Pets")',
+                data: { id: self.clientId },
                 type: 'GET',
                 dataType: 'HTML',  // add this line
                 success: function (result) {
@@ -131,10 +132,10 @@
         }
 
         self.edit = function (item) {
-            var Client = item.ClientNumber;
+            var Client = item.PetNumber;
             $.ajax({
                 prop: 'href',
-                url: '@Url.Action("Edit", "Clients")',
+                url: '@Url.Action("Edit", "Pets")',
                 type: 'GET',
                 data: { id: Client },
                 dataType: 'HTML',  // add this line
@@ -145,16 +146,15 @@
             });
         }
 
-        self.delete = function (Client) {
-            if (confirm('¿Desea eliminar a socio "' + Client.FirstName + " " + Client.LastName + '"?')) {
-                var clientNum = Client.ClientNumber;
+        self.delete = function (Pet) {
+            if (confirm('¿Desea eliminar a la mascota "' + Pet.FirstName + '"?')) {
                 $.ajax({
-                    url: '@Url.Action("Delete", "Clients")',
+                    url: '@Url.Action("Delete", "Pets")',
                     cache: false,
                     type: 'POST',
-                    data: { id: clientNum },
+                    data: { idClient: self.clientId, pet: Pet },
                     success: function (data) {
-                        self.clients.remove(Client);
+                        self.pets.remove(Pet);
 
                     }
                 }).fail(
@@ -164,8 +164,7 @@
         }
 
     };
-    debugger;
-    ko.applyBindings(new ClientsViewModel(), document.getElementById("pets"));
+    ko.applyBindings(new PetsViewModel(), document.getElementById("pets"));
 
 
 </script>

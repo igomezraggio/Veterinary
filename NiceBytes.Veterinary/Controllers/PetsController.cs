@@ -10,11 +10,14 @@ namespace NiceBytes.Veterinary.Controllers
 {
     public class PetsController : Controller
     {
-        private PetsDb petsDb = new PetsDb();
+        private ClientsDb clientsDb = new ClientsDb();
+        private int currentClientId = -1;
         // GET: Pets
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
-            IEnumerable<PetsModel> pets = petsDb.Pets.ToList();
+            IEnumerable<PetsModel> pets = clientsDb.GetClientPets(id);
+            currentClientId = id;
+            ViewBag.ClientId = id;
             return PartialView("_PetsPartial",pets);
         }
 
@@ -25,25 +28,35 @@ namespace NiceBytes.Veterinary.Controllers
         }
 
         // GET: Pets/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return PartialView("_PetsPartial");
+            PetsModel newPet = new PetsModel();
+            newPet.ClientsModelId = id;
+            newPet.DateEntry = DateTime.Now;
+            return PartialView("_CreatePet", newPet);
         }
 
         // POST: Pets/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(PetsModel newPet)
         {
-            try
+            newPet.DateEntry = DateTime.Now;
+            ClientsController clientController = new ClientsController();
+            ClientsModel client = clientController.GetClient(newPet.ClientsModelId);
+            if (!ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                return PartialView("_CreatePet", newPet);
             }
-            catch
+            else
             {
-                return View();
+                bool IsSuccess = clientsDb.AddPet(client,newPet);
+                if (IsSuccess)
+                {
+                    ModelState.Clear();
+                    return Json(new { success = true, responseText = "Your message successfuly sent!" }, JsonRequestBehavior.AllowGet);
+                }
             }
+            return PartialView("_CreatePet", newPet);
         }
 
         // GET: Pets/Edit/5
@@ -68,26 +81,12 @@ namespace NiceBytes.Veterinary.Controllers
             }
         }
 
-        // GET: Pets/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Pets/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public void Delete(int idClient, PetsModel pet)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            // TODO: Add delete logic here
+            clientsDb.DeletePet(idClient,pet);
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

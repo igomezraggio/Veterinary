@@ -117,12 +117,12 @@
 
         self.selected = ko.observable(self.clients()[0]);
 
-        self.viewPets = function () {
-            alert("holaaa");
-            debugger;
+        self.viewPets = function (item) {
+            var Client = item.Id;
             $.ajax({
                 prop: 'href',
                 url: '@Url.Action("Index", "Pets")',
+                data: { id: Client },
                 type: 'GET',
                 dataType: 'HTML',  // add this line
                 success: function (result) {
@@ -171,7 +171,7 @@
                     data: { id: clientNum },
                     success: function (data) {
                         self.clients.remove(Client);
-
+                        $('#result').empty();
                     }
                 }).fail(
                 function (xhr, textStatus, err) {

@@ -12,21 +12,11 @@ namespace NiceBytes.Veterinary.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ClientsModel
+    public partial class Registry
     {
-        public ClientsModel()
-        {
-            this.PetsModels = new HashSet<PetsModel>();
-        }
-    
         public int Id { get; set; }
-        public int ClientNumber { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public int PhoneNumber { get; set; }
-        public System.DateTime DateEntry { get; set; }
+        public int PetsModelId { get; set; }
     
-        public virtual ICollection<PetsModel> PetsModels { get; set; }
+        public virtual PetsModel PetsModel { get; set; }
     }
 }

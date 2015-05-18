@@ -68,6 +68,9 @@ namespace NiceBytes.Veterinary.Controllers
             return PartialView("_EditClient", client);
         }
 
+        public ClientsModel GetClient(int id){
+            return clientsDb.GetClientById(id);
+        }
         // POST: Client/Edit/5
         /*
         [HttpPost]
