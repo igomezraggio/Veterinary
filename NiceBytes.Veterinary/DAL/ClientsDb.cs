@@ -67,7 +67,7 @@ namespace NiceBytes.Veterinary.DAL
 
         public IEnumerable<ClientsModel> GetAllClients()
         {
-            return Clients.ToList();
+            return Clients.OrderBy(z => z.ClientNumber).ToList();
         }
 
         public bool UpdateClient(ClientsModel client)
@@ -102,7 +102,14 @@ namespace NiceBytes.Veterinary.DAL
         public IEnumerable<PetsModel> GetClientPets(int clientId)
         {
             ClientsModel client = Clients.Where(x => x.Id == clientId).FirstOrDefault();
-            return client.PetsModels.ToList();
+            return client.PetsModels.OrderBy(z => z.FirstName).ToList();
+        }
+
+        public PetsModel GetClientPet(int clientId, int petId)
+        {
+            ClientsModel client = Clients.Where(x => x.Id == clientId).FirstOrDefault();
+            PetsModel pet = client.PetsModels.Where(x => x.Id == petId).FirstOrDefault();
+            return pet;
         }
 
         public bool AddPet(ClientsModel client, PetsModel pet)
@@ -118,6 +125,21 @@ namespace NiceBytes.Veterinary.DAL
             {
                 return false;
             }
+        }
+
+        public bool UpdatePet(PetsModel pet)
+        {
+            var clientFound = Clients.Find(pet.ClientsModelId);
+            if (clientFound == null)
+                return false;
+
+            var petFound = clientFound.PetsModels.Where(x => x.Id == pet.Id).FirstOrDefault();
+            pet.ClientsModel = petFound.ClientsModel;
+            PetsModels.Remove(petFound);
+            PetsModels.Add(pet);
+
+            this.SaveChanges();
+            return true;
         }
 
         public bool DeletePet(int clientId, PetsModel pet)

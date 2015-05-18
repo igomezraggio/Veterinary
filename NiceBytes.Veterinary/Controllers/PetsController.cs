@@ -60,25 +60,29 @@ namespace NiceBytes.Veterinary.Controllers
         }
 
         // GET: Pets/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int idClient, int idPet)
         {
-            return View();
+            PetsModel pet = clientsDb.GetClientPet(idClient, idPet);
+
+            //ViewBag.IsUpdate = true;
+            return PartialView("_EditPet", pet);
         }
 
         // POST: Pets/Edit/5
+        
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Update(PetsModel pet)
         {
-            try
-            {
-                // TODO: Add update logic here
 
+            clientsDb.UpdatePet(pet);
+            //clientDbChanged = true;
+
+            return Json(new { success = true, responseText = "Your message successfuly sent!" }, JsonRequestBehavior.AllowGet);
+            //return RedirectToAction("Index");
+            /*{
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            }*/
+            //return PartialView("_EditClient", client);
         }
 
         [HttpPost]

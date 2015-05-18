@@ -1,7 +1,7 @@
 ﻿@model NiceBytes.Veterinary.Models.PetsModel
 @using Newtonsoft.Json;
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
@@ -15,9 +15,10 @@
         </li>
     </ul>
 
-    <div class="form-horizontal" id="petAdd">
+    <div class="form-horizontal" id="petEdit">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -74,11 +75,11 @@
         var self = this;
         self.Pet = ko.observable(@Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore})));
 
-        self.FirstNameM = ko.observable("");
-        self.GenderM = ko.observable("");
-        self.DateBirthM = ko.observable("");
-        self.BreedM = ko.observable("");
-        self.ColourM = ko.observable("");
+        self.FirstNameM = ko.observable(@Html.Raw(Json.Encode(Model.FirstName)));
+        self.GenderM = ko.observable(@Html.Raw(Json.Encode(Model.Gender)));
+        self.DateBirthM = ko.observable(@Html.Raw(Json.Encode(Model.DateBirth.ToString())));
+        self.BreedM = ko.observable(@Html.Raw(Json.Encode(Model.Breed)));
+        self.ColourM = ko.observable(@Html.Raw(Json.Encode(Model.Colour)));
 
         self.addSave = function (item) {
             //var Pet = item;
@@ -92,6 +93,8 @@
             item.Pet().Breed = self.BreedM();
             item.Pet().Colour = self.ColourM();
             item.Pet().ClientsModelId = self.Pet().ClientsModelId;
+            item.Pet().Id = self.Pet().Id;
+            item.Pet().ClientsModel = self.Pet().ClientsModel;
 
             var PetToUpdate = {};
             PetToUpdate.FirstName = item.Pet().FirstName;
@@ -101,11 +104,13 @@
             PetToUpdate.Breed = item.Pet().Breed;
             PetToUpdate.Colour = item.Pet().Colour;
             PetToUpdate.ClientsModelId = item.Pet().ClientsModelId;
+            PetToUpdate.Id = item.Pet().Id;
+            PetToUpdate.ClientsModel = item.Pet().ClientsModel;
 
-            var Data = JSON.stringify({ newPet: PetToUpdate });
+            var Data = JSON.stringify({ pet: PetToUpdate });
             console.log(Data);
             $.ajax({
-                url: '@Url.Action("Create", "Pets")',
+                url: '@Url.Action("Update", "Pets")',
                 cache: false,
                 type: 'POST',
                 dataType: "json",
@@ -129,7 +134,7 @@
         }
     }
 
-    ko.applyBindings(new Details(), document.getElementById("petAdd"));
+    ko.applyBindings(new Details(), document.getElementById("petEdit"));
 </script>
 
 @section Scripts {

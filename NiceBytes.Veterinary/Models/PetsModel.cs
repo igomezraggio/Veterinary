@@ -11,7 +11,9 @@ namespace NiceBytes.Veterinary.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+
     public partial class PetsModel
     {
         public PetsModel()
@@ -20,12 +22,25 @@ namespace NiceBytes.Veterinary.Models
         }
     
         public int Id { get; set; }
+
+        [DisplayName("Nombre")]
         public string FirstName { get; set; }
+        
         public int ClientsModelId { get; set; }
+
+        [DisplayName("Sexo")]
         public string Gender { get; set; }
+
+        [DisplayName("F. de Nacimiento")]
         public System.DateTime DateBirth { get; set; }
+
+        [DisplayName("Raza")]
         public string Breed { get; set; }
+
+        [DisplayName("Color")]
         public string Colour { get; set; }
+
+        [DisplayName("F. de Ingreso")]
         public System.DateTime DateEntry { get; set; }
     
         public virtual ClientsModel ClientsModel { get; set; }

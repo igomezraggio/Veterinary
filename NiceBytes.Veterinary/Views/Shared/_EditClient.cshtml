@@ -103,14 +103,17 @@
             item.Client().Email = self.EmailM();
             item.Client().DateEntry = self.DateEntryM();
             item.Client().PhoneNumber = self.PhoneNumberM();
+            item.Client().PetsModels
 
             var clientToUpdate = {};
             clientToUpdate.ClientNumber = item.Client().ClientNumber;
             clientToUpdate.FirstName = item.Client().FirstName;
             clientToUpdate.LastName = item.Client().LastName;
             clientToUpdate.Email = item.Client().Email;
-            clientToUpdate.DateEntry = item.Client().DateEntry
-            clientToUpdate.PhoneNumber = item.Client().PhoneNumber
+            clientToUpdate.DateEntry = item.Client().DateEntry;
+            clientToUpdate.PhoneNumber = item.Client().PhoneNumber;
+            clientToUpdate.PetsModels = item.Client().PetsModels;
+
             var Data = JSON.stringify({ client: clientToUpdate });
             console.log(Data);
             $.ajax({

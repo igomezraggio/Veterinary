@@ -17,9 +17,7 @@ namespace NiceBytes.Veterinary.Controllers
         // GET: Client
         public ActionResult Index()
         {
-            IEnumerable<ClientsModel> clients = clientsDb.Clients.ToList();
-            if (clientDbChanged)
-                clients = clientsDb.GetAllClients();
+            IEnumerable<ClientsModel> clients = clientsDb.GetAllClients();
             return View(clients);
         }
 

@@ -130,12 +130,12 @@
         }
 
         self.edit = function (item) {
-            var Client = item.Id;
+            var petId = item.Id;
             $.ajax({
                 prop: 'href',
                 url: '@Url.Action("Edit", "Pets")',
                 type: 'GET',
-                data: { id: Client },
+                data: { idClient: self.clientId, idPet: petId },
                 dataType: 'HTML',  // add this line
                 success: function (result) {
                     $('#result').empty();

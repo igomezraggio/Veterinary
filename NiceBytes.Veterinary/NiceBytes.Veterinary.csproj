@@ -354,6 +354,7 @@
     <Content Include="Views\Shared\_EditClient.cshtml" />
     <Content Include="Views\Shared\_PetsPartial.cshtml" />
     <Content Include="Views\Shared\_CreatePet.cshtml" />
+    <Content Include="Views\Shared\_EditPet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
