@@ -8,24 +8,26 @@
 
 <script src="~/Scripts/knockout-3.3.0.js"></script>
 
-<div class="row" id="clients">
+<div class="row" id="clientsRow">
+    
     <div class="col-sm-5 col-md-5 col-lg-5">
-        <form class="navbar-form" role="search">
-            <div class="input-group fill-parent">
-                <input type="text" class="form-control" placeholder="Buscar..." name="srch-term" id="srch-term">
-                <div class="input-group-btn pull-left">
-                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                </div>
+        <div class="input-group fill-parent">
+            <input type="text" class="form-control" placeholder="Buscar..." name="srch-term" id="srch-term" data-bind="value:query">
+            <div class="input-group-btn pull-left">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
             </div>
-        </form>
-    </div>
-    <div class="col-sm-3 col-md-3 col-lg-3 pull-right margin-right-20">
-        <div class="navbar-form">
-            <button data-bind="click: $root.add" class="btn btn-default">
-                Agregar Nuevo
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
         </div>
+    </div>
+    
+    @*<input type="text" class="form-control" placeholder="Buscar..." name="srch-term" id="srch-term" data-bind="value:query">
+    <div class="input-group-btn pull-left">
+        <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+    </div>*@
+    <div class="col-sm-3 col-md-3 col-lg-3 pull-right margin-right-20">
+        <button data-bind="click: $root.add" class="btn btn-default">
+            Agregar Nuevo
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
     </div>
     <div id="gridClients">
         <div class="panel panel-default">
@@ -68,9 +70,9 @@
                     <tfoot>
                         <tr>
                             <td colspan="2">
-                                <span data-bind="click:previousPage,visible:currentPage() > 1" class="glyphicon glyphicon-circle-arrow-left" style="cursor:pointer;"></span>
-                                <span data-bind="text:currentPage"></span>
-                                <span data-bind="click:nextPage,visible:currentPage() < lastPage" class="glyphicon glyphicon-circle-arrow-right" style="cursor:pointer;"></span>
+                                <span data-bind="click:previousPage" class="glyphicon glyphicon-circle-arrow-left" style="cursor:pointer;"></span>
+                                <span data-bind="text: currentPageIndex() + 1"></span>
+                                <span data-bind="click:nextPage" class="glyphicon glyphicon-circle-arrow-right" style="cursor:pointer;"></span>
                             </td>
                         </tr>
                     </tfoot>
@@ -92,16 +94,48 @@
     function ClientsViewModel() {
         var self = this;
         debugger;
+
         // properties
         self.clients = ko.observableArray(@Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings{ReferenceLoopHandling = ReferenceLoopHandling.Ignore})));
-        self.pageSize = 4;
-        self.lastPage = Math.ceil(self.clients().length / self.pageSize);
-        self.currentPage = ko.observable(1);
+
+        //self.pageSize = ko.observable(4);
+        //self.lastPage = Math.ceil(self.clients().length / self.pageSize);
+        this.currentPageIndex = ko.observable(0);
+        this.nbPerPage = 2;
+        this.totalPages = ko.computed(function () {
+            var div = Math.floor(self.clients().length / self.nbPerPage);
+            div += self.clients().length % self.nbPerPage > 0 ? 1 : 0;
+            return div - 1;
+        });
+
+        this.paginated = ko.computed(function () {
+            var first = self.currentPageIndex() * self.nbPerPage;
+            return self.clients.slice(first, first + self.nbPerPage);
+        });
+        this.hasPrevious = ko.computed(function () {
+            return self.currentPageIndex() !== 0;
+        });
+        this.hasNext = ko.computed(function () {
+            return self.currentPageIndex() !== self.totalPages();
+        });
+        this.nextPage = function () {
+            if (self.currentPageIndex() < self.totalPages()) {
+                self.currentPageIndex(self.currentPageIndex() + 1);
+            }
+        }
+
+        this.previousPage = function () {
+            if (self.currentPageIndex() != 0) {
+                self.currentPageIndex(self.currentPageIndex() - 1);
+            }
+        }
+        /*
         self.currentClients = ko.computed(function () {
             var startIndex = (self.currentPage() - 1) * self.pageSize;
             var endIndex = startIndex + self.pageSize;
             return self.clients().slice(startIndex, endIndex);
         });
+
 
         // methods
         self.nextPage = function () {
@@ -110,6 +144,24 @@
         self.previousPage = function () {
             self.currentPage(self.currentPage() - 1);
         };
+        */
+
+        self.query = ko.observable("");
+        //identify the first matching item by name
+
+        self.currentClients = ko.computed(function () {
+            var clientsArray = self.clients();
+            if (self.query().length > 0) {
+                
+                return ko.utils.arrayFilter(clientsArray, function (item) {
+                    return ko.utils.stringStartsWith(item.FirstName.toLowerCase(), self.query().toLowerCase())
+                });
+            } else {
+                var first = self.currentPageIndex() * self.nbPerPage;
+                return clientsArray.slice(first, first + self.nbPerPage);
+                //return clientsArray.slice(startIndex, endIndex);
+            }
+        });
 
         self.select = function (item) {
             clientSelected = item.ClientNumber;
@@ -180,8 +232,16 @@
         }
 
     };
-    debugger;
-    ko.applyBindings(new ClientsViewModel(), document.getElementById("clients"));
+
+    ko.utils.stringStartsWith = function (string, startsWith) {
+        string = string || "";
+        if (startsWith.length > string.length)
+            return false;
+        return string.substring(0, startsWith.length) === startsWith;
+    };
+
+
+    ko.applyBindings(new ClientsViewModel(), document.getElementById("clientsRow"));
 
 
 </script>
