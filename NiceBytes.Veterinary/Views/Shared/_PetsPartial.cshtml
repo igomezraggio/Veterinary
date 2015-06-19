@@ -54,6 +54,9 @@
                             <td data-bind="text:Gender"></td>
                             <td data-bind="text:DateEntry"></td>
                             <td>
+                                <button data-bind="click: $root.registry" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-folder-open"></span>
+                                </button>
                                 <button data-bind="click: $root.edit" class="btn btn-default">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
@@ -159,6 +162,23 @@
                 function (xhr, textStatus, err) {
                 });
             }
+        }
+
+        self.registry = function (item) {
+            var petId = item.Id;
+            $.ajax({
+                url: '@Url.Action("RedirectToRegister", "Pets")',
+                type: 'POST',
+                data: { idClient: self.clientId, idPet: petId },
+                success: function (returndata) {
+                    debugger;
+                    if (returndata.ok)
+                        window.location = returndata.newurl;
+                    else
+                        window.alert(returndata.message);
+ 
+                }
+            });
         }
 
     };

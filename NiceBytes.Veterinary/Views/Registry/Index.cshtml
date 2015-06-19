@@ -1,0 +1,43 @@
+﻿@model IEnumerable<NiceBytes.Veterinary.Models.Registry>
+@{
+    ViewBag.Title = "Index";
+
+}
+
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active">
+        <a href="#">Historia</a>
+    </li>
+
+    <li role="presentation">
+            <a href="#">Vacunas</a>
+    </li>
+
+    <li role="presentation">
+        <a href="#">Desparacitación</a>
+    </li>
+
+    <li role="presentation">
+        <a href="#">Cirugías</a>
+    </li>
+
+    <li role="presentation">
+        <a href="#">EC</a>
+    </li>
+
+</ul>
+
+<script src="~/Scripts/knockout-3.3.0.js"></script>
+
+<div class="row" id="clientsRow">
+
+    <div class="col-sm-5 col-md-5 col-lg-5">
+        <div class="input-group fill-parent">
+            <input type="text" class="form-control" placeholder="Buscar..." name="srch-term" id="srch-term" data-bind="value:query">
+            <div class="input-group-btn pull-left">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -92,5 +92,23 @@ namespace NiceBytes.Veterinary.Controllers
             clientsDb.DeletePet(idClient,pet);
 
         }
+
+        [HttpPost]
+        public ActionResult RedirectToRegister(int idClient, int idPet)
+        {
+            try
+            {
+
+                //in a real world, here will be multiple database calls - or others
+                return Json(new { ok = true, newurl = Url.Action("Index", "Registry", new { idClient = idClient, idPet = idPet }) });
+            }
+            catch (Exception ex)
+            {
+                //TODO: log
+                return Json(new { ok = false, message = ex.Message });
+            }
+        }
+
+
     }
 }
